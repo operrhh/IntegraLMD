@@ -1,0 +1,8 @@
+venv/
+.env
+*.pot
+*.pyc
+__pycache__/
+data/
+
+.vscode
