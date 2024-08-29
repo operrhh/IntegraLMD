@@ -1,11 +1,11 @@
-# IntegraLMD
+# IntegraLMD 🚑
 
 
 En este repositorio se pueden encontrar todas dependencias necesarias para lograr ejecutar el proyecto IntegraLMD.
 
 ## Authors
 
-- [@Luciano Pino](https://github.com/LucianoPino)
+- [@Luciano Pino](https://github.com/LucianoPino) 🐈
 ## Instalación
 
 Crear ambiente-virtual
