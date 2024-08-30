@@ -24,8 +24,17 @@ RUN wget https://download.oracle.com/otn_software/linux/instantclient/2111000/in
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_11:$LD_LIBRARY_PATH
 ENV PATH=/opt/oracle/instantclient_21_11:$PATH
 
-# Copiar el archivo .env al contenedor
-COPY .env /app/
+# Crear un archivo .env dentro del contenedor con valores predeterminados
+RUN echo "DB_DEFAULT_HOST=default_host" >> /app/.env && \
+    echo "DB_DEFAULT_PORT=1521" >> /app/.env && \
+    echo "DB_DEFAULT_NAME=default_name" >> /app/.env && \
+    echo "DB_DEFAULT_USER=default_user" >> /app/.env && \
+    echo "DB_DEFAULT_PASSWORD=default_password" >> /app/.env && \
+    echo "DB_PEOPLE_SOFT_HOST=default_people_host" >> /app/.env && \
+    echo "DB_PEOPLE_SOFT_PORT=1521" >> /app/.env && \
+    echo "DB_PEOPLE_SOFT_NAME=default_people_name" >> /app/.env && \
+    echo "DB_PEOPLE_SOFT_USER=default_people_user" >> /app/.env && \
+    echo "DB_PEOPLE_SOFT_PASSWORD=default_people_password" >> /app/.env
 
 # Instalar dependencias de Python
 COPY requirements.txt /app/
