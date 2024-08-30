@@ -24,6 +24,9 @@ RUN wget https://download.oracle.com/otn_software/linux/instantclient/2111000/in
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_11:$LD_LIBRARY_PATH
 ENV PATH=/opt/oracle/instantclient_21_11:$PATH
 
+# Copiar el archivo .env al contenedor
+COPY .env /app/
+
 # Instalar dependencias de Python
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
