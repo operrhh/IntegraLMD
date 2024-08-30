@@ -1,0 +1,41 @@
+# Usar una imagen base oficial de Python
+FROM python:3.10
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Instalar dependencias del sistema para Oracle
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libaio1 wget unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Descargar e instalar el cliente instantáneo básico de Oracle
+RUN wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
+    && unzip instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -d /opt/oracle \
+    && rm instantclient-basic-linux.x64-21.11.0.0.0dbru.zip
+
+# Descargar e instalar SQL*Plus
+RUN wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip \
+    && unzip instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -d /opt/oracle \
+    && rm instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip
+
+# Configurar variables de entorno para el cliente de Oracle
+ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_11:$LD_LIBRARY_PATH
+ENV PATH=/opt/oracle/instantclient_21_11:$PATH
+
+# Instalar dependencias de Python
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el resto del código fuente del proyecto al contenedor
+COPY integra_lmd /app/integra_lmd
+
+# Copiar el archivo de configuración de Gunicorn al contenedor
+COPY gunicorn_config.py /app/
+
+# Cambiar el directorio de trabajo
+WORKDIR /app/integra_lmd
+
+# Comando para ejecutar la aplicación con la configuración de Gunicorn
+CMD ["gunicorn", "-c", "/app/gunicorn_config.py", "integra_lmd.wsgi:application"]
