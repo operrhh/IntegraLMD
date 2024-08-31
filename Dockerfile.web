@@ -46,7 +46,7 @@ COPY integra_lmd /app/integra_lmd
 # Copiar el archivo de configuración de Gunicorn al contenedor
 COPY gunicorn_config.py /app/
 
-# Cambiar el directorio de trabajo
+# Cambiar el directorio de trabajo al subdirectorio "integra_lmd"
 WORKDIR /app/integra_lmd
 
 # Comando para ejecutar la aplicación con la configuración de Gunicorn
