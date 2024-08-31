@@ -2,9 +2,9 @@ from .base import *
 from decouple import config
 from cx_Oracle import makedsn
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Database
 ENGINE = 'django.db.backends.oracle'
