@@ -1,25 +1,19 @@
-import os
 from .base import *
 from decouple import config
 from cx_Oracle import makedsn
 
-# prueba SECURITY WARNING: don't run with debug turned on in production!
-# Debug no puede ser True en produccion
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 ENGINE = 'django.db.backends.oracle'
 
-# Leer variables de entorno
-DEFAULT_HOST = config('DB_DEFAULT_HOST')
-DEFAULT_PORT = config('DB_DEFAULT_PORT')
-DEFAULT_SERVICE_NAME = config('DB_DEFAULT_NAME')
-DEFAULT_USER = config('DB_DEFAULT_USER')
-DEFAULT_PASSWORD = config('DB_DEFAULT_PASSWORD')
+OCI_HOST = config('DB_DEFAULT_HOST')
+OCI_PORT = config('DB_DEFAULT_PORT')
+OCI_SERVICE_NAME = config('DB_DEFAULT_NAME')
+OCI_USER = config('DB_DEFAULT_USER')
+OCI_PASSWORD = config('DB_DEFAULT_PASSWORD')
 
 PEOPLE_HOST = config('DB_PEOPLE_SOFT_HOST')
 PEOPLE_PORT = config('DB_PEOPLE_SOFT_PORT')
@@ -27,26 +21,22 @@ PEOPLE_SERVICE_NAME = config('DB_PEOPLE_SOFT_NAME')
 PEOPLE_USER = config('DB_PEOPLE_SOFT_USER')
 PEOPLE_PASSWORD = config('DB_PEOPLE_SOFT_PASSWORD')
 
-OCI_DSN = makedsn(DEFAULT_HOST, DEFAULT_PORT, service_name=DEFAULT_SERVICE_NAME)
+OCI_DSN = makedsn(OCI_HOST, OCI_PORT, service_name=OCI_SERVICE_NAME)
 PEOPLE_DSN = makedsn(PEOPLE_HOST, PEOPLE_PORT, service_name=PEOPLE_SERVICE_NAME)
-
 
 DATABASES = {
     'default': {
         'ENGINE': ENGINE,
         'NAME': OCI_DSN,
-        'USER': DEFAULT_USER,
-        'PASSWORD': DEFAULT_PASSWORD,
+        'USER': OCI_USER,
+        'PASSWORD': OCI_PASSWORD,
     },
-   'peoplesoft': {
-       'ENGINE': ENGINE,
-       'NAME': PEOPLE_DSN,
-       'USER': PEOPLE_USER,
-       'PASSWORD': PEOPLE_PASSWORD,
-   }
+    'people_soft': {
+        'ENGINE': ENGINE,
+        'NAME': PEOPLE_DSN,
+        'USER': PEOPLE_USER,
+        'PASSWORD': PEOPLE_PASSWORD,
+    }
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
