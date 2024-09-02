@@ -31,7 +31,7 @@ DATABASES = {
         'USER': OCI_USER,
         'PASSWORD': OCI_PASSWORD,
     },
-    'people_soft': {
+    'peoplesoft': {
         'ENGINE': ENGINE,
         'NAME': PEOPLE_DSN,
         'USER': PEOPLE_USER,

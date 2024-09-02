@@ -12,7 +12,7 @@ class LiquidacionService:
         try:
             trabajador = self.liquidacion_service_peoplesoft.get_liquidaciones(rut, anio, mes_desde, mes_hasta)
 
-            self.save_file_pdf(trabajador)
+            #self.save_file_pdf(trabajador)
             
             res = {
                 "fechaReporte": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
