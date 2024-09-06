@@ -1,6 +1,7 @@
 from .base import *
 from decouple import config
 from cx_Oracle import makedsn
+import os
 
 DEBUG = True
 
@@ -38,5 +39,10 @@ DATABASES = {
         'PASSWORD': PEOPLE_PASSWORD,
     }
 }
+
+AWS_ACCESS_KEY_ID = config('BK_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('BK_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('BK_AWS_BUCKET_NAME')
+
 
 STATIC_URL = 'static/'

@@ -39,4 +39,9 @@ DATABASES = {
     }
 }
 
+# Uso de las variables de entorno en settings.py
+AWS_ACCESS_KEY_ID = config('BK_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('BK_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('BK_AWS_BUCKET_NAME')
+
 STATIC_URL = 'static/'
