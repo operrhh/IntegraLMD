@@ -4,24 +4,7 @@ from django.conf import settings
 
 import boto3
 import os
-
-
-# class BucketService:
-#     def __init__(self):
-#         self.bucket_name = 'integra-lmd'
-
-#     def get_bucket_name(self):
-#         return self.bucket_name
-
-#     def get_bucket(self):
-#         return connections['s3'].bucket(self.bucket_name)
-
-#     def get_file(self, key):
-#         return self.get_bucket().Object(key).get()
-
-#     def put_file(self, key, file):
-#         return self.get_bucket().put_object(Key=key, Body=file)
-
+import shutil
 
 class BucketService:
     def __init__(self):
@@ -42,28 +25,31 @@ class BucketService:
                     print(obj['Key'])
                     name_file = obj['Key']
                     list_objects.append(name_file)
-                    #s3.download_file(name_bucket, name_file, name_file)
-
+                    #self.s3_client.download_file(Bucket=self.bucket_name, Key=name_file, Filename=name_file)
             return list_objects
         except Exception as e:
-            print("Error al testear bucket: ", e)
+            print("Error al listar objetos del bucket: ", e)
             raise e
     
-    def upload_file(self, key, file):
-        file = './tmp/test.txt'
-        key = 'test.txt'
-
+    def upload_file(self, key):
         ruta_actual = os.path.abspath(__file__)
         directorio = os.path.dirname(ruta_actual)
+        directorio = os.path.join(directorio, 'tmp', key)
 
-        print(ruta_actual)
-        print(directorio)
-
-        directorio = directorio + '/tmp/test.txt'
-
+        # Recorrer directorio para ver si existe y cargar archivos
+        for root, dirs, files in os.walk(directorio):
+            for file in files:
+                path_file = os.path.join(root, file)
+                try:
+                    self.s3_client.upload_file(Filename=path_file,Key=f'{key}/{file}', Bucket=self.bucket_name)
+                except Exception as e:
+                    print("Error al subir archivo: ", e)
+                    raise e
+        
+        # Eliminar el directorio temporal después de subir los archivos
         try:
-            res = self.s3_client.upload_file(Filename=directorio,Key=key, Bucket=self.bucket_name)
-            print(res)
+            shutil.rmtree(directorio)
+            #print(f"Directorio {directorio} eliminado exitosamente.")
         except Exception as e:
-            print("Error al subir archivo: ", e)
+            print(f"Error al eliminar el directorio {directorio}: {e}")
             raise e
