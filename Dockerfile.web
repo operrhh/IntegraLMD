@@ -6,9 +6,13 @@ WORKDIR /app
 
 # Instalar dependencias del sistema para Oracle
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libaio1 wget unzip \
+    && apt-get install -y --no-install-recommends libaio1 wget unzip nginx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Configurar Nginx para que funcione como proxy inverso
+RUN rm /etc/nginx/sites-enabled/default
+COPY nginx.conf /etc/nginx/sites-available/default
 
 # Descargar e instalar el cliente instantáneo básico de Oracle
 RUN wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
@@ -49,8 +53,14 @@ COPY integra_lmd /app/integra_lmd
 # Copiar el archivo de configuración de Gunicorn al contenedor
 COPY gunicorn_config.py /app/
 
+# Copiar la configuración de Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Cambiar el directorio de trabajo al subdirectorio "integra_lmd"
 WORKDIR /app/integra_lmd
 
-# Comando para ejecutar la aplicación con la configuración de Gunicorn
-CMD ["gunicorn", "-c", "/app/gunicorn_config.py", "integra_lmd.wsgi:application"]
+# Exponer el puerto 8080
+EXPOSE 8080
+
+# Iniciar Gunicorn y Nginx en paralelo
+CMD service nginx start && gunicorn -c /app/gunicorn_config.py integra_lmd.wsgi:application
