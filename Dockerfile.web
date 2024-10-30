@@ -38,16 +38,22 @@ RUN echo "DB_DEFAULT_HOST=default_host" >> /app/.env && \
     echo "DB_PEOPLE_SOFT_PORT=1521" >> /app/.env && \
     echo "DB_PEOPLE_SOFT_NAME=default_people_name" >> /app/.env && \
     echo "DB_PEOPLE_SOFT_USER=default_people_user" >> /app/.env && \
-    echo "DB_PEOPLE_SOFT_PASSWORD=default_people_password" >> /app/.env
+    echo "DB_PEOPLE_SOFT_PASSWORD=default_people_password" >> /app/.env && \
+    echo "BK_AWS_ACCESS_KEY_ID=default_aws_access_key_id" >> /app/.env && \
+    echo "BK_AWS_SECRET_ACCESS_KEY=default_aws_secret_access_key" >> /app/.env && \
+    echo "BK_AWS_BUCKET_NAME=default_aws_bucket_name" >> /app/.env
 
-# Copiar el resto del código fuente del proyecto al contenedor
+# Copiar el código fuente de la aplicación
 COPY integra_lmd /app/integra_lmd
 
-# Copiar el archivo de configuración de Gunicorn al contenedor
+# Copiar el archivo de configuración de Gunicorn
 COPY gunicorn_config.py /app/
 
 # Cambiar el directorio de trabajo al subdirectorio "integra_lmd"
 WORKDIR /app/integra_lmd
 
-# Comando para ejecutar la aplicación con la configuración de Gunicorn
-CMD ["gunicorn", "-c", "/app/gunicorn_config.py", "integra_lmd.wsgi:application"]
+# Exponer el puerto 8000 para Gunicorn
+EXPOSE 8000
+
+# Iniciar Gunicorn
+CMD gunicorn -c /app/gunicorn_config.py integra_lmd.wsgi:application
