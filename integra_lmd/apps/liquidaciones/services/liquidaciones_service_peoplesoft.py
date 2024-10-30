@@ -13,8 +13,13 @@ class LiquidacionServicePeoplesoft:
                 if out_cur:
                     items = [res for res in out_cur]
                     if len(items) > 0:
-                        format_items = self.format_liquidaciones(items)
-                        return format_items
+                        list_liquidaciones = self.format_liquidaciones(items)
+
+                        liq = list_liquidaciones[0]
+                        company = liq.company
+
+                        worker_data = self.get_liquidaciones_data(rut,company,anio, mes_hasta)
+                        pass
                     else:
                         raise ValueError("No se encontraron liquidaciones")
         except cx_Oracle.DatabaseError as e:
@@ -34,10 +39,34 @@ class LiquidacionServicePeoplesoft:
                 )
             )
 
-        trabajador = Trabajador(
-            rut=liquidaciones[0][1],
-            nombre=liquidaciones[0][4],
-            liquidaciones=list_liquidaciones
-        )
+        # trabajador = Trabajador(
+        #     rut=liquidaciones[0][1],
+        #     nombre=liquidaciones[0][4],
+        #     liquidaciones=list_liquidaciones
+        # )
 
-        return trabajador
+        return list_liquidaciones
+
+    
+    def get_liquidaciones_data(self, emplid, company, year, month):
+        try:
+            with connections['peoplesoft'].cursor() as cursor:
+                out_cur = cursor.connection.cursor()
+
+                cursor.callproc("SP_GET_LIQUIDACIONES_DATA", [out_cur, emplid, company, year, month])
+                if out_cur:
+                    items = [res for res in out_cur]
+                    if len(items) > 0:
+                        format_items = self.format_liquidaciones_data(items,emplid)
+                        return format_items
+                    else:
+                        raise ValueError("No se encontraron liquidaciones")
+        except cx_Oracle.DatabaseError as e:
+            raise ValueError("Error de base de datos: " + str(e))
+        except Exception as e:
+            raise e
+
+    def format_liquidaciones_data(self, data,):
+        trabajador = Trabajador(
+            rut=emplid
+        )

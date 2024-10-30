@@ -14,11 +14,30 @@ class Liquidacion:
             archivo.write(self.archivo)
 
 class Trabajador:
-    def __init__(self, rut: str, nombre: str, liquidaciones: List[Liquidacion]):
+    def __init__(self, 
+                rut: str,
+                nombre: str, 
+                tipo_contrato:str, 
+                afc:bool, 
+                fecha_contrato_trabajo:str,
+                fecha_afiliacion:str,
+                monto_remuneracion:int,
+                imponible_cesantia:int,
+                actividad_laboral:str,
+                caja_compensacion:str,
+                direccion_trabajo:str,
+                ocupacion:str,
+                calidad_trabajador:str,
+                regimen_previsional:str,
+                institucion_previsional:str,
+                institucion_salud:str,
+                liquidaciones: List[Liquidacion]):
         if not liquidaciones:
             raise ValueError("El trabajador debe tener al menos una liquidación.")
         self.rut = rut
         self.nombre = nombre
+        self.tipo_contrato = tipo_contrato
+        self.afc = afc
         self.liquidaciones = liquidaciones
 
     def format_json(self) -> dict:
@@ -29,7 +48,7 @@ class Trabajador:
                 {
                     "anio": liquidacion.anio,
                     "mes": liquidacion.mes,
-                    "nombreDocumento": liquidacion.nombre_documento
+                    "nombreDocumento": liquidacion.nombre_documento,
                 }
                 for liquidacion in self.liquidaciones
             ]
