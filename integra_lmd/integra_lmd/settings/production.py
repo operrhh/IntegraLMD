@@ -4,7 +4,7 @@ from cx_Oracle import makedsn
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.0.107','0.0.0.0','127.0.0.1','localhost','web', '168.138.71.27', '129.151.110.152','10.85.4.72']
+ALLOWED_HOSTS = ['integralmd.ccu.cl','192.168.0.107','0.0.0.0','127.0.0.1','localhost','web', '168.138.71.27', '129.151.110.152','10.85.4.72']
 
 # Database
 ENGINE = 'django.db.backends.oracle'
