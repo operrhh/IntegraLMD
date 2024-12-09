@@ -1,29 +1,59 @@
+from typing import List
 from django.db import connections
 import cx_Oracle
 from ..models import Liquidacion, Trabajador
 
 class LiquidacionServicePeoplesoft:
-    def get_liquidaciones(self, rut, anio, mes_desde, mes_hasta) -> Trabajador:
+    def get_liquidaciones(self, rut, anio, mes, cantidad_meses) -> Trabajador:
         """Obtiene las liquidaciones de un trabajador en el sistema Peoplesoft."""
         try:
             with connections['peoplesoft'].cursor() as cursor:
                 out_cur = cursor.connection.cursor()
-                cursor.callproc("SP_GET_LIQUIDACIONES", [out_cur, rut, anio, mes_desde, mes_hasta])
+                cursor.callproc("SP_GET_LIQUIDACIONES", [out_cur, rut])
                 
                 items = list(out_cur)  # Convierte el cursor a una lista
                 if not items:
                     raise ValueError("No se encontraron liquidaciones")
 
                 list_liquidaciones = self.format_liquidaciones(items)
-                liq = list_liquidaciones[0]
+                list_liquidaciones_sorted = sorted(list_liquidaciones, key=lambda l: (l.anio, l.mes))
+                liq = list_liquidaciones_sorted[-1]
+
+                list_liquidaciones = self.filtrar_liquidaciones(list_liquidaciones_sorted, int(anio), int(mes), int(cantidad_meses))
                 
-                worker_data = self.get_liquidaciones_data(rut, liq.compania, anio, mes_hasta, liq.nombre_trabajador, list_liquidaciones)
+                worker_data = self.get_liquidaciones_data(rut, liq.compania, anio, mes ,liq.nombre_trabajador, list_liquidaciones)
                 return worker_data
 
         except cx_Oracle.DatabaseError as e:
             raise ValueError(f"Error de base de datos: {e}")
         except Exception as e:
             raise e
+
+    def filtrar_liquidaciones(self, lista_liquidaciones: List[Liquidacion], anio: int, mes: int, cantidad_meses: int) -> List[Liquidacion]:
+        # Crear una lista de los periodos requeridos
+        periodos = []
+        for i in range(cantidad_meses):
+            nuevo_mes = mes - i
+            nuevo_anio = anio
+
+            # Ajustar el año y el mes si el mes es menor o igual a 0
+            while nuevo_mes <= 0:
+                nuevo_mes += 12
+                nuevo_anio -= 1
+            
+            periodos.append((nuevo_anio, nuevo_mes))
+        
+        # Filtrar las liquidaciones según los periodos generados
+        liquidaciones_filtradas = [
+            l for l in lista_liquidaciones if (l.anio, l.mes) in periodos
+        ]
+        
+        # Ordenar por año y mes descendente
+        liquidaciones_filtradas.sort(key=lambda l: (l.anio, l.mes), reverse=True)
+        
+        return liquidaciones_filtradas
+
+
 
     def get_liquidaciones_data(self, emplid, company, year, month, name, liquidaciones):
         """Obtiene los datos de liquidación específicos de un trabajador."""

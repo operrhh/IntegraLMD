@@ -13,9 +13,9 @@ class LiquidacionService:
         self.liquidacion_service_peoplesoft = LiquidacionServicePeoplesoft()
         self.bucket_service = BucketService()
     
-    def get_liquidaciones(self, rut, anio, mes_desde, mes_hasta):
+    def get_liquidaciones(self, rut, anio, mes, cantidad_meses):
         try:
-            trabajador = self.liquidacion_service_peoplesoft.get_liquidaciones(rut, anio, mes_desde, mes_hasta)
+            trabajador = self.liquidacion_service_peoplesoft.get_liquidaciones(rut, anio, mes, cantidad_meses)
 
             json_response = {
                 "fechaReporte": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -27,7 +27,7 @@ class LiquidacionService:
             self.save_json_file(json_response, trabajador)
 
             # self.bucket_service.list_objects_bucket()
-            self.bucket_service.upload_file(key=trabajador.rut)
+            #self.bucket_service.upload_file(key=trabajador.rut)
 
             return json_response
         except Exception as e:

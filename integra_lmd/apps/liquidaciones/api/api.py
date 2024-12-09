@@ -20,8 +20,8 @@ def liquidaciones(request):
             res = liquidacion_service.get_liquidaciones(
                 params['rut'],
                 params['anio'],
-                params['mesDesde'],
-                params['mesHasta']
+                params['mes'],
+                params['cantidad_meses']
             )
             res_serializer = FormattedLiquidacionSerializer(data=res)
             if res_serializer.is_valid():
