@@ -33,6 +33,7 @@ class Trabajador:
                 regimen_previsional:str,
                 institucion_previsional:str,
                 institucion_salud:str,
+                renta_imponible:str,
                 liquidaciones: List[Liquidacion]):
         if not liquidaciones:
             raise ValueError("El trabajador debe tener al menos una liquidación.")
@@ -52,6 +53,7 @@ class Trabajador:
         self.regimen_previsional = regimen_previsional
         self.institucion_previsional = institucion_previsional
         self.institucion_salud = institucion_salud
+        self.renta_imponible = renta_imponible
         self.liquidaciones = liquidaciones
 
     def format_json(self) -> dict:
@@ -72,6 +74,7 @@ class Trabajador:
             "regimenPrevisional": self.regimen_previsional,
             "institucionPrevisional": self.institucion_previsional,
             "institucionSalud": self.institucion_salud,
+            "rentaImponible": self.renta_imponible,
             "liquidaciones": [
                 {
                     "anio": liquidacion.anio,

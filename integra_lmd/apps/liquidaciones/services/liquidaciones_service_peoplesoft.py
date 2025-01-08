@@ -53,8 +53,6 @@ class LiquidacionServicePeoplesoft:
         
         return liquidaciones_filtradas
 
-
-
     def get_liquidaciones_data(self, emplid, company, year, month, name, liquidaciones):
         """Obtiene los datos de liquidación específicos de un trabajador."""
         try:
@@ -105,5 +103,6 @@ class LiquidacionServicePeoplesoft:
             regimen_previsional=data[0][11],
             institucion_previsional=data[0][12],
             institucion_salud=data[0][13],
+            renta_imponible=data[0][14],
             liquidaciones=liquidaciones
         )
