@@ -64,7 +64,7 @@ class LiquidacionServicePeoplesoft:
                 if not items:
                     raise ValueError("No se encontraron datos de liquidación")
 
-                return self.format_liquidaciones_data(items, emplid, name, liquidaciones)
+                return self.format_liquidaciones_data(items, emplid, name, company, liquidaciones)
 
         except cx_Oracle.DatabaseError as e:
             raise ValueError(f"Error de base de datos: {e}")
@@ -84,11 +84,12 @@ class LiquidacionServicePeoplesoft:
             ) for liquidacion in liquidaciones
         ]
 
-    def format_liquidaciones_data(self, data, emplid, name, liquidaciones):
+    def format_liquidaciones_data(self, data, emplid, name, company ,liquidaciones):
         """Formatea los datos de liquidación en un objeto Trabajador."""
         return Trabajador(
             rut=emplid,
             nombre=name,
+            empresa=company,
             tipo_contrato=data[0][0],
             afc=data[0][1],
             fecha_contrato_trabajo=data[0][2].strftime("%Y-%m-%d"),

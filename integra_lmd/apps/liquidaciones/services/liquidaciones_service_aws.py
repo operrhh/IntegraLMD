@@ -49,7 +49,6 @@ class BucketService:
         # Eliminar el directorio temporal después de subir los archivos
         try:
             shutil.rmtree(directorio)
-            #print(f"Directorio {directorio} eliminado exitosamente.")
         except Exception as e:
             print(f"Error al eliminar el directorio {directorio}: {e}")
             raise e

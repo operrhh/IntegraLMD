@@ -18,7 +18,8 @@ class Liquidacion:
 class Trabajador:
     def __init__(self, 
                 rut: str,
-                nombre: str, 
+                nombre: str,
+                empresa: str,
                 tipo_contrato:str, 
                 afc:bool, 
                 fecha_contrato_trabajo:str,
@@ -39,6 +40,7 @@ class Trabajador:
             raise ValueError("El trabajador debe tener al menos una liquidación.")
         self.rut = rut
         self.nombre = nombre
+        self.empresa = empresa
         self.tipo_contrato = tipo_contrato
         self.afc = afc
         self.fecha_contrato_trabajo = fecha_contrato_trabajo
@@ -60,6 +62,7 @@ class Trabajador:
         return {
             "rut": self.rut,
             "nombre": self.nombre,
+            "empresa": self.empresa,
             "tipoContrato": self.tipo_contrato,
             "afc": self.afc,
             "fechaContratoTrabajo": self.fecha_contrato_trabajo,
