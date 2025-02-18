@@ -1,7 +1,7 @@
 from typing import List
 
 class Liquidacion:
-    def __init__(self, anio: int, mes: int, nombre_documento: str, archivo_blob: bytes, nombre_trabajador:str, compania:str):
+    def __init__(self, anio: int, mes: int, nombre_documento: str, archivo_blob: bytes, nombre_trabajador:str, compania:str, monto_remuneracion:int, imponible_cesantia:int):
         if not 1 <= mes <= 12:
             raise ValueError("El mes debe estar entre 1 y 12.")
         self.anio = anio
@@ -10,6 +10,8 @@ class Liquidacion:
         self.archivo = archivo_blob.read()
         self.nombre_trabajador = nombre_trabajador
         self.compania = compania
+        self.monto_remuneracion = monto_remuneracion
+        self.imponible_cesantia = imponible_cesantia
     
     def save_file(self, path: str):
         with open(path, 'wb') as archivo:
@@ -24,8 +26,6 @@ class Trabajador:
                 afc:bool, 
                 fecha_contrato_trabajo:str,
                 fecha_afiliacion:str,
-                monto_remuneracion:int,
-                imponible_cesantia:int,
                 actividad_laboral:str,
                 caja_compensacion:str,
                 direccion_trabajo:str,
@@ -45,8 +45,6 @@ class Trabajador:
         self.afc = afc
         self.fecha_contrato_trabajo = fecha_contrato_trabajo
         self.fecha_afiliacion = fecha_afiliacion
-        self.monto_remuneracion = monto_remuneracion
-        self.imponible_cesantia = imponible_cesantia
         self.actividad_laboral = actividad_laboral
         self.caja_compensacion = caja_compensacion
         self.direccion_trabajo = direccion_trabajo
@@ -67,8 +65,6 @@ class Trabajador:
             "afc": self.afc,
             "fechaContratoTrabajo": self.fecha_contrato_trabajo,
             "fechaAfiliacion": self.fecha_afiliacion,
-            "montoRemuneracion": self.monto_remuneracion,
-            "imponibleCesantia": self.imponible_cesantia,
             "actividadLaboral": self.actividad_laboral,
             "cajaCompensacion": self.caja_compensacion,
             "direccionTrabajo": self.direccion_trabajo,
@@ -83,6 +79,8 @@ class Trabajador:
                     "anio": liquidacion.anio,
                     "mes": liquidacion.mes,
                     "nombreDocumento": liquidacion.nombre_documento,
+                    "montoRemuneracion": liquidacion.monto_remuneracion,
+                    "imponibleCesantia": liquidacion.imponible_cesantia
                 }
                 for liquidacion in self.liquidaciones
             ]

@@ -80,7 +80,9 @@ class LiquidacionServicePeoplesoft:
                 nombre_trabajador=liquidacion[2],
                 compania=liquidacion[3],
                 nombre_documento=liquidacion[4],
-                archivo_blob=liquidacion[5]
+                archivo_blob=liquidacion[5],
+                monto_remuneracion=int(liquidacion[6]),
+                imponible_cesantia=int(liquidacion[7]),
             ) for liquidacion in liquidaciones
         ]
 
@@ -94,16 +96,16 @@ class LiquidacionServicePeoplesoft:
             afc=data[0][1],
             fecha_contrato_trabajo=data[0][2].strftime("%Y-%m-%d"),
             fecha_afiliacion=data[0][3].strftime("%Y-%m-%d"),
-            monto_remuneracion=data[0][4],
-            imponible_cesantia=data[0][5],
-            actividad_laboral=data[0][6],
-            caja_compensacion=data[0][7],
-            direccion_trabajo=data[0][8],
-            ocupacion=data[0][9],
-            calidad_trabajador=data[0][10],
-            regimen_previsional=data[0][11],
-            institucion_previsional=data[0][12],
-            institucion_salud=data[0][13],
-            renta_imponible=data[0][14],
+            # monto_remuneracion=data[0][4],
+            # imponible_cesantia=data[0][5],
+            actividad_laboral=data[0][4],
+            caja_compensacion=data[0][5],
+            direccion_trabajo=data[0][6],
+            ocupacion=data[0][7],
+            calidad_trabajador=data[0][8],
+            regimen_previsional=data[0][9],
+            institucion_previsional=data[0][10],
+            institucion_salud=data[0][11],
+            renta_imponible=data[0][12],
             liquidaciones=liquidaciones
         )
