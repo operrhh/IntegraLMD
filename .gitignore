@@ -4,5 +4,6 @@ venv/
 *.pyc
 __pycache__/
 data/
-
 .vscode
+tmp/
+integra_lmd/test_conection.py
