@@ -1,6 +1,6 @@
 from .base import *
 from decouple import config
-from cx_Oracle import makedsn
+from oracledb import makedsn
 
 DEBUG = False
 

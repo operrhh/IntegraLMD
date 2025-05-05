@@ -1,7 +1,10 @@
 from .base import *
 from decouple import config
-from cx_Oracle import makedsn
-import os
+from oracledb import makedsn
+import oracledb
+
+# Iniciador Local
+# oracledb.init_oracle_client(lib_dir=r"C:\oracle\instantclient_21_17")
 
 DEBUG = True
 
@@ -23,20 +26,20 @@ PEOPLE_USER = config('DB_PEOPLE_SOFT_USER')
 PEOPLE_PASSWORD = config('DB_PEOPLE_SOFT_PASSWORD')
 
 OCI_DSN = makedsn(OCI_HOST, OCI_PORT, service_name=OCI_SERVICE_NAME)
-PEOPLE_DSN = makedsn(PEOPLE_HOST, PEOPLE_PORT, service_name=PEOPLE_SERVICE_NAME)
+#PEOPLE_DSN = makedsn(host=PEOPLE_HOST, port=PEOPLE_PORT, service_name=PEOPLE_SERVICE_NAME)
 
 DATABASES = {
     'default': {
-        'ENGINE': ENGINE,
-        'NAME': OCI_DSN,
-        'USER': OCI_USER,
-        'PASSWORD': OCI_PASSWORD,
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },    
     'peoplesoft': {
-        'ENGINE': ENGINE,
-        'NAME': PEOPLE_DSN,
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': PEOPLE_SERVICE_NAME,
         'USER': PEOPLE_USER,
         'PASSWORD': PEOPLE_PASSWORD,
+        'HOST': PEOPLE_HOST,
+        'PORT': PEOPLE_PORT
     }
 }
 

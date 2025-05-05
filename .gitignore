@@ -7,3 +7,4 @@ data/
 .vscode
 tmp/
 integra_lmd/test_conection.py
+db.sqlite3

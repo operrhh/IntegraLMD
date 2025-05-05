@@ -32,7 +32,7 @@ LOCAL_APPS = [
 
 THIRD_APPS = [
     'rest_framework',
-    'cx_Oracle'
+    'oracledb',
 ]
 
 INSTALLED_APPS =  BASE_APPS + LOCAL_APPS + THIRD_APPS
