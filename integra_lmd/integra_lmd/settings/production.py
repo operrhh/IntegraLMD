@@ -1,5 +1,9 @@
 from .base import *
 from decouple import config
+import oracledb
+
+# Inicializa modo thick
+oracledb.init_oracle_client(lib_dir="/opt/oracle/instantclient_21_17")
 
 DEBUG = False
 

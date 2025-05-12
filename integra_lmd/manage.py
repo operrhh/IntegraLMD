@@ -6,22 +6,35 @@ import oracledb
 
 sys.modules['cx_Oracle'] = oracledb
 
+is_production = False
+
 # Set the Oracle client library path
 try:
-    #Local
-    #oracledb.init_oracle_client(lib_dir=r"C:\oracle\instantclient_21_17")
-
-    #Produccion
-    lib_path = "/opt/oracle/instantclient_21_17"
-    oracledb.init_oracle_client(lib_dir=lib_path)
+    if is_production:
+        #Produccion
+        lib_path = "/opt/oracle/instantclient_21_17"
+        oracledb.init_oracle_client(
+            lib_dir=lib_path,
+            driver_name="Oracle Client",  # Fuerza modo Thick
+            config_dir=None,
+            error_url=None
+        )
+        print(f"✅ Oracle Client configurado (Modo Thick) en {lib_path}")
+    else:
+        #Local
+        lib_path = r"C:\oracle\instantclient_21_17"
+        oracledb.init_oracle_client(lib_dir=lib_path)
 except Exception as e:
-    print(f"Error al inicializar el cliente de Oracle: {e}")
+    print(f"❌ Error configurando Oracle Client: {e}")
     sys.exit(1)
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'integra_lmd.settings.production')
-    #os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'integra_lmd.settings.local')
+
+    if is_production:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'integra_lmd.settings.production')
+    else:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'integra_lmd.settings.local')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
