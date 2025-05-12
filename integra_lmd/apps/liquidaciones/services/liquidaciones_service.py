@@ -28,7 +28,7 @@ class LiquidacionService:
 
             # self.bucket_service.list_objects_bucket()
             
-            # self.bucket_service.upload_file(key=trabajador.rut)
+            self.bucket_service.upload_file(key=trabajador.rut)
 
             return json_response
         except Exception as e:
